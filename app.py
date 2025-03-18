@@ -364,6 +364,9 @@ def reporte_mes():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+    from os import environ
+    app.run(host="0.0.0.0", port=int(environ.get("PORT", 5000)))
+
     app.run(debug=True)
 
 
