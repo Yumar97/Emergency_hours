@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Nuevo Doctor</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        .acciones {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+        .acciones form {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        button {
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .mensaje {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Registrar Nuevo Doctor</h1>
+
+    <!-- Mostrar mensaje de éxito si se registra correctamente -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="mensaje">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('nuevo_doctor') }}" method="POST">
+        <label for="nombre">Nombre del Doctor:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <button class="agregar">Agregar</button>
+    </form>
+
+    <h2>Lista de Doctores Registrados</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doctor in doctores %}
+            <tr>
+                <td>{{ doctor.id }}</td>
+                <td>{{ doctor.name }}</td>
+                <td class="acciones">
+                    <!-- Formulario para eliminar -->
+                    <form action="{{ url_for('eliminar_doctor', id=doctor.id) }}" method="POST">
+                        <button type="submit" onclick="return confirm('¿Estás seguro de eliminar este doctor?')">🗑️</button>
+                    </form>
+
+                    <!-- Formulario para editar -->
+                    <form action="{{ url_for('editar_doctor', id=doctor.id) }}" method="POST">
+                        <input type="text" name="nuevo_nombre" placeholder="Nuevo nombre" required>
+                        <button type="submit">✏️</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">No hay doctores registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('index') }}">Volver</a>
+
+</body>
+</html>

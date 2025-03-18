@@ -1,0 +1,273 @@
+/* General */
+body {
+    font-family: "Trebuchet MS", "Arial", sans-serif;
+    font-size: 16px; /* Mejorar la legibilidad */
+    background-color: #f1f5f9; /* Fondo suave */
+    margin: 0;
+    padding: 0;
+}
+
+/* Encabezado */
+h1 {
+    font-size: 2.5em;
+    color: #0072BC; /* Azul EsSalud */
+    text-align: center;
+    margin-top: 20px;
+}
+
+h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Estilos para el encabezado con el logo y título */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Espacio entre el logo y el título */
+    margin-bottom: 20px;
+}
+
+/* Logo */
+.logo {
+    height: 50px; /* Ajusta el tamaño del logo */
+    width: auto;
+    
+}
+.header-container {
+    display: flex;
+    align-items: center; /* Alinear verticalmente */
+    gap: 15px; /* Espacio entre logo y título */
+    justify-content: center; /* Centra horizontalmente */
+    margin-bottom: 20px;
+    width: 100%; /* Asegurar que ocupe todo el ancho */
+    text-align: center;
+}
+
+
+
+/* Estilo del formulario */
+.formulario, .form-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center; /* Centra los elementos */
+    padding: 20px;
+}
+
+.formulario label,
+.form-container label {
+    font-weight: bold;
+    width: 200px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.formulario input,
+.formulario select,
+.form-container input,
+.form-container select {
+    width: 200px; /* Asegurar que todos los inputs tengan el mismo tamaño */
+    height: 45px;
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 70px;
+    border: 1px solid #ccc;
+}
+
+.formulario button,
+.mes-container button {
+    height: 40px;
+    width: 150px;
+    background-color: #0072BC;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 75px;
+    transition: background-color 0.3s;
+}
+
+.formulario button:hover,
+.mes-container button:hover {
+    background-color: #005A9C; /* Azul más oscuro en hover */
+}
+
+/* Tabla de Turnos */
+.table-container {
+    width: 80%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.table-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+.styled-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.styled-table thead {
+    background-color: #0072BC; /* Azul EsSalud */
+    color: #fff;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #D4E4FA; /* Celeste EsSalud */
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #0072BC;
+}
+
+/* Botón de Cerrar Sesión */
+.logout-container {
+    width: 100%;
+    text-align: right;
+    padding: 20px;
+}
+
+.logout-container a {
+    background-color: #DC3545; /* Rojo para indicar peligro */
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.logout-container a:hover {
+    background-color: #C82333; /* Rojo más oscuro en hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .formulario, .form-container {
+        justify-content: center;
+    }
+
+    .formulario label,
+    .form-container label {
+        width: 100%; /* Las etiquetas se alinean encima de los inputs */
+        text-align: left;
+    }
+
+    .formulario input,
+    .formulario select,
+    .form-container input,
+    .form-container select {
+        width: 100%; /* Ancho completo para pantallas pequeñas */
+    }
+
+    .styled-table th, .styled-table td {
+        padding: 10px;
+    }
+
+    .table-container {
+        width: 90%;
+    }
+}
+
+/* Ajuste para el contenedor del mes */
+.mes-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mes-container select,
+.mes-container button {
+    padding: 8px 12px;
+    font-size: 16px;
+}
+
+.mes-container button {
+    background-color: #0072BC; /* Azul EsSalud */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.mes-container button:hover {
+    background-color: #005A9C; /* Azul más oscuro en hover */
+}
+
+
+/* Botón Agregar - Igual al estilo de los otros botones */
+button.agregar {
+    height: 40px;
+    width: 150px;
+    background-color: #0072BC; /* Azul EsSalud */
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button.agregar:hover {
+    background-color: #005A9C; /* Azul más oscuro en hover */
+}
+
+/* Estilos generales para inputs, selects y botones */
+input, select, button {
+    width: 200px; /* Ancho uniforme */
+    height: 35px; /* Alto uniforme */
+    font-size: 16px; /* Tamaño de fuente consistente */
+    padding: 4px; /* Espaciado interno */
+    border-radius: 100px; /* Bordes redondeados */
+    border: 1px solid #ccc; /* Borde sutil */
+}
+
+
+/* Estilo adicional para los botones */
+button {
+    background-color: #0072BC; /* Azul EsSalud */
+    color: white; /* Texto en blanco */
+    font-weight: bold; /* Negrita */
+    cursor: pointer; /* Cambia el cursor al pasar */
+    transition: background-color 0.3s; /* Efecto suave al pasar el mouse */
+}
+
+/* Cambio de color cuando el mouse pasa sobre los botones */
+button:hover {
+    background-color: #005A9C; /* Azul más oscuro */
+}
+
+
+
+
+.formulario input,
+.formulario select,
+.form-container input,
+.form-container select {
+    width: 400px; /* Mismo ancho para todos */
+    height: 45px; /* Mismo alto para todos */
+    font-size: 16px; /* Tamaño uniforme del texto */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 25px; /* Bordes redondeados */
+    border: 1px solid #ccc; /* Borde gris */
+    box-sizing: border-box; /* Evita que padding afecte el tamaño total */
+}
+
+

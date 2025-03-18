@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Turno</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Editar Turno</h1>
+
+    <form action="/editar/{{ turno.id }}" method="POST">
+        <label for="nombre">Nombre del Doctor:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ turno.doctor }}" required>
+
+        <label for="area">Área de Atención:</label>
+        <select id="area" name="area" required>
+            {% for opcion in opciones %}
+                <option value="{{ opcion }}" {% if opcion == turno.area %}selected{% endif %}>{{ opcion }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="fecha_trabajo">Fecha de Trabajo:</label>
+        <input type="date" id="fecha_trabajo" name="fecha_trabajo" value="{{ turno.fecha_trabajo }}" required>
+
+        <label for="horas_trabajadas">Horas Trabajadas:</label>
+        <input type="number" id="horas_trabajadas" name="horas_trabajadas" min="1" max="24" value="{{ turno.horas_trabajadas }}" required>
+
+        <label for="turno">Turno:</label>
+        <select id="turno" name="turno" required>
+            <option value="Mañana" {% if turno.turno == "Mañana" %}selected{% endif %}>Mañana</option>
+            <option value="Tarde" {% if turno.turno == "Tarde" %}selected{% endif %}>Tarde</option>
+            <option value="Noche" {% if turno.turno == "Noche" %}selected{% endif %}>Noche</option>
+        </select>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <a href="/">Volver</a>
+</body>
+</html>

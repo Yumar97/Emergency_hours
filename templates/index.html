@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergencia EsSalud</title>  
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header-container">
+        <img src="{{ url_for('static', filename='img/logo_essalud.png') }}" alt="Logo EsSalud" class="logo">
+        <h1>Emergencia EsSalud</h1>
+    </div>
+    
+
+    <form action="/turnos" method="POST">
+    <div class="form-container">
+        <label for="nombre">Nombre del Doctor:</label>
+        <select name="nombre" required>
+        <option value="">Seleccione un doctor</option>
+        {% for doctor in doctores %}
+        <option value="{{ doctor.name }}">{{ doctor.name }}</option>
+        {% endfor %}
+        </select>
+
+</ul>
+
+<a href="{{ url_for('nuevo_doctor') }}" class="btn">Nuevo Doctor</a>
+
+        <label for="area">Área de Atención:</label>
+        <select name="area">
+            {% for opcion in opciones %}
+                <option value="{{ opcion }}">{{ opcion }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="fecha_trabajo">Fecha de Trabajo:</label>
+        <input type="date" id="fecha_trabajo" name="fecha_trabajo" required>
+
+        <label for="horas_trabajadas">Horas Trabajadas:</label>
+        <input type="number" id="horas_trabajadas" name="horas_trabajadas" min="1" max="24" required>
+
+        <label for="turno">Turno:</label>
+        <select id="turno" name="turno" required>
+            <option value="Mañana">Mañana</option>
+            <option value="Tarde">Tarde</option>
+            <option value="Noche">Noche</option>
+        </select>
+
+        <button class="agregar">Agregar</button>
+
+    </div>
+    </form>
+    
+    <div class="table-container">
+    <h2 class="table-title">Lista de Turnos</h2>
+
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>Área</th>
+                <th>Fecha</th>
+                <th>Horas Trabajadas</th>
+                <th>Turno</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if turnos %}
+                {% for turno in turnos %}
+                <tr>
+                    <td>{{ turno.doctor }}</td>
+                    <td>{{ turno.area }}</td>
+                    <td>{{ turno.fecha_trabajo }}</td>
+                    <td>{{ turno.horas_trabajadas }}</td>
+                    <td>{{ turno.turno }}</td>
+                    <td>
+                        <a href="/editar/{{ turno.id }}">Editar</a> | 
+                        <a href="/borrar/{{ turno.id }}">Borrar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: gray;">No hay turnos registrados.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+        
+    </div>
+
+    <h2>Ver Calendario del Mes</h2>
+    <form id="formCalendario">
+        <div class="mes-container">
+
+        <label for="mes_calendario">Selecciona un mes:</label>
+        <select name="mes" id="mes_calendario">
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+        </select>
+        <button type="submit">Ver Calendario</button>
+    </div>
+    </form>
+    
+    <script>
+        document.getElementById("formCalendario").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const mesSeleccionado = document.getElementById("mes_calendario").value;
+            window.location.href = `/calendario/${mesSeleccionado}`;
+        });
+    </script>
+    
+    
+
+    <h2>Generar Reporte del Mes</h2>
+    <form action="{{ url_for('reporte_mes') }}" method="get">
+        <div class="mes-container">
+        <label for="mes">Selecciona un mes:</label>
+        <select name="mes" id="mes">
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+        </select>
+        <button type="submit">Ver Reporte</button>
+    </div>
+    </form>
+</body>
+
+<div style="width: 100%; display: flex; justify-content: flex-end;">
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Cerrar Sesión</a>
+</div>
+
+</html>

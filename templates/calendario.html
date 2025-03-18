@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Turnos</title>
+    
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <style>
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 1em;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .calendar th {
+            background-color: #0072BC;
+            color: white;
+            padding: 12px;
+            font-size: 1.2em;
+        }
+
+        .calendar td {
+            width: 14%;
+            height: 100px;
+            vertical-align: top;
+            border: 1px solid #dddddd;
+            padding: 10px;
+            position: relative;
+        }
+
+        .calendar td strong {
+            display: block;
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        /* Resalta los días con turnos */
+        .has-turno {
+            background-color: #D4E4FA;
+        }
+
+        /* Estilos de los botones */
+        .info-btn {
+            display: block;
+            width: 90%;
+            padding: 5px;
+            margin: 5px auto;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .info-btn:hover {
+            filter: brightness(85%);
+        }
+
+        /* Enlace de volver */
+        .volver {
+            display: block;
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-align: center;
+            color: #0072BC;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .volver:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        function mostrarInformacion(doctor, area, horas, turno, fecha) {
+            alert(`📅 Fecha: ${fecha}
+👨‍⚕️ Doctor: ${doctor}
+🏥 Área: ${area}
+⏳ Horas: ${horas}h
+🌙 Turno: ${turno}`);
+        }
+    </script>
+</head>
+<body>
+    <h1>Calendario de {{ nombre_mes }} {{ year }}</h1>
+
+    <table class="calendar">
+        <tr>
+            <th>Domingo</th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+            <th>Sábado</th>
+        </tr>
+        <tr>
+            {% for _ in range(primer_dia_semana) %}
+                <td class="empty"></td>
+            {% endfor %}
+            {% for dia in range(1, dias_del_mes + 1) %}
+                <td>
+                    <strong>{{ dia }}</strong>
+                    {% for turno in turnos %}
+                        {% if turno.fecha_trabajo.day == dia %}
+                            {% set apellido = turno.doctor.split()[-1] %}
+                            <button class="info-btn" 
+                                style="background-color: {{ colores_doctores.get(turno.doctor, '#FF5733') }}"
+                                onclick="mostrarInformacion(
+                                '{{ turno.doctor | e }}',
+                                '{{ turno.area | e }}',
+                                '{{ turno.horas_trabajadas }}',
+                                '{{ turno.turno | e }}',
+                                '{{ turno.fecha_trabajo.strftime('%Y-%m-%d') }}'
+                                );">
+                                Información ({{ apellido }})
+                            </button>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                {% if (primer_dia_semana + dia) % 7 == 0 %}
+                    </tr><tr>
+                {% endif %}
+            {% endfor %}
+            {% for _ in range((primer_dia_semana + dias_del_mes) % 7, 7) %}
+                <td class="empty"></td>
+            {% endfor %}
+        </tr>
+    </table>
+    
+    <a href="/" class="volver">Volver</a>
+    
+</body>
+</html>
