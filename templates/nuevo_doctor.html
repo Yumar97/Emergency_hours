@@ -40,7 +40,7 @@
 
     <h1>Registrar Nuevo Doctor</h1>
 
-    <!-- Mostrar mensaje de éxito si se registra correctamente -->
+   
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -71,12 +71,12 @@
                 <td>{{ doctor.id }}</td>
                 <td>{{ doctor.name }}</td>
                 <td class="acciones">
-                    <!-- Formulario para eliminar -->
+                  
                     <form action="{{ url_for('eliminar_doctor', id=doctor.id) }}" method="POST">
                         <button type="submit" onclick="return confirm('¿Estás seguro de eliminar este doctor?')">🗑️</button>
                     </form>
 
-                    <!-- Formulario para editar -->
+                 
                     <form action="{{ url_for('editar_doctor', id=doctor.id) }}" method="POST">
                         <input type="text" name="nuevo_nombre" placeholder="Nuevo nombre" required>
                         <button type="submit">✏️</button>

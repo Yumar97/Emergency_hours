@@ -23,6 +23,6 @@ class Turno(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     doctor = db.Column(db.String(100), nullable=False)
     area = db.Column(db.String(100), nullable=False)
-    fecha_trabajo = db.Column(db.Date, nullable=False)  # Verifica que exista este campo
+    fecha_trabajo = db.Column(db.Date, nullable=False) 
     horas_trabajadas = db.Column(db.Integer, nullable=False)
     turno = db.Column(db.String(50), nullable=False)

@@ -1,8 +1,8 @@
-/* General */
+ 
 body {
     font-family: "Trebuchet MS", "Arial", sans-serif;
-    font-size: 16px; /* Mejorar la legibilidad */
-    background-color: #f1f5f9; /* Fondo suave */
+    font-size: 16px;  
+    background-color: #f1f5f9;  
     margin: 0;
     padding: 0;
 }
@@ -10,7 +10,7 @@ body {
 /* Encabezado */
 h1 {
     font-size: 2.5em;
-    color: #0072BC; /* Azul EsSalud */
+    color: #0072BC;  
     text-align: center;
     margin-top: 20px;
 }
@@ -26,23 +26,23 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px; /* Espacio entre el logo y el título */
+    gap: 15px;  
     margin-bottom: 20px;
 }
 
 /* Logo */
 .logo {
-    height: 50px; /* Ajusta el tamaño del logo */
+    height: 50px;  
     width: auto;
     
 }
 .header-container {
     display: flex;
-    align-items: center; /* Alinear verticalmente */
-    gap: 15px; /* Espacio entre logo y título */
-    justify-content: center; /* Centra horizontalmente */
+    align-items: center; 
+    gap: 15px;  
+    justify-content: center; 
     margin-bottom: 20px;
-    width: 100%; /* Asegurar que ocupe todo el ancho */
+    width: 100%;  
     text-align: center;
 }
 
@@ -53,7 +53,7 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
-    justify-content: center; /* Centra los elementos */
+    justify-content: center;  
     padding: 20px;
 }
 
@@ -69,7 +69,7 @@ h2 {
 .formulario select,
 .form-container input,
 .form-container select {
-    width: 200px; /* Asegurar que todos los inputs tengan el mismo tamaño */
+    width: 200px;  
     height: 45px;
     font-size: 16px;
     padding: 8px;
@@ -92,7 +92,7 @@ h2 {
 
 .formulario button:hover,
 .mes-container button:hover {
-    background-color: #005A9C; /* Azul más oscuro en hover */
+    background-color: #005A9C;  
 }
 
 /* Tabla de Turnos */
@@ -126,12 +126,12 @@ h2 {
 }
 
 .styled-table thead {
-    background-color: #0072BC; /* Azul EsSalud */
+    background-color: #0072BC;  
     color: #fff;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #D4E4FA; /* Celeste EsSalud */
+    background-color: #D4E4FA;  
 }
 
 .styled-table tbody tr:last-of-type {
@@ -146,7 +146,7 @@ h2 {
 }
 
 .logout-container a {
-    background-color: #DC3545; /* Rojo para indicar peligro */
+    background-color: #DC3545;  
     padding: 10px 20px;
     border-radius: 5px;
     color: white;
@@ -155,7 +155,7 @@ h2 {
 }
 
 .logout-container a:hover {
-    background-color: #C82333; /* Rojo más oscuro en hover */
+    background-color: #C82333;  
 }
 
 /* Responsive Design */
@@ -166,7 +166,7 @@ h2 {
 
     .formulario label,
     .form-container label {
-        width: 100%; /* Las etiquetas se alinean encima de los inputs */
+        width: 100%;  
         text-align: left;
     }
 
@@ -174,7 +174,7 @@ h2 {
     .formulario select,
     .form-container input,
     .form-container select {
-        width: 100%; /* Ancho completo para pantallas pequeñas */
+        width: 100%;  
     }
 
     .styled-table th, .styled-table td {
@@ -200,7 +200,7 @@ h2 {
 }
 
 .mes-container button {
-    background-color: #0072BC; /* Azul EsSalud */
+    background-color: #0072BC;  
     color: white;
     border: none;
     cursor: pointer;
@@ -208,15 +208,15 @@ h2 {
 }
 
 .mes-container button:hover {
-    background-color: #005A9C; /* Azul más oscuro en hover */
+    background-color: #005A9C;  
 }
 
 
-/* Botón Agregar - Igual al estilo de los otros botones */
+/* Botón Agregar  */
 button.agregar {
     height: 40px;
     width: 150px;
-    background-color: #0072BC; /* Azul EsSalud */
+    background-color: #0072BC;  
     color: white;
     border: none;
     cursor: pointer;
@@ -226,32 +226,32 @@ button.agregar {
 }
 
 button.agregar:hover {
-    background-color: #005A9C; /* Azul más oscuro en hover */
+    background-color: #005A9C;  
 }
 
 /* Estilos generales para inputs, selects y botones */
 input, select, button {
-    width: 200px; /* Ancho uniforme */
-    height: 35px; /* Alto uniforme */
-    font-size: 16px; /* Tamaño de fuente consistente */
-    padding: 4px; /* Espaciado interno */
-    border-radius: 100px; /* Bordes redondeados */
-    border: 1px solid #ccc; /* Borde sutil */
+    width: 200px;  
+    height: 35px; 
+    font-size: 16px;  
+    padding: 4px;  
+    border-radius: 100px; 
+    border: 1px solid #ccc; 
 }
 
 
 /* Estilo adicional para los botones */
 button {
-    background-color: #0072BC; /* Azul EsSalud */
-    color: white; /* Texto en blanco */
-    font-weight: bold; /* Negrita */
-    cursor: pointer; /* Cambia el cursor al pasar */
-    transition: background-color 0.3s; /* Efecto suave al pasar el mouse */
+    background-color: #0072BC;  
+    color: white;  
+    font-weight: bold;  
+    cursor: pointer; 
+    transition: background-color 0.3s;  
 }
 
 /* Cambio de color cuando el mouse pasa sobre los botones */
 button:hover {
-    background-color: #005A9C; /* Azul más oscuro */
+    background-color: #005A9C;  
 }
 
 
@@ -261,13 +261,13 @@ button:hover {
 .formulario select,
 .form-container input,
 .form-container select {
-    width: 400px; /* Mismo ancho para todos */
-    height: 45px; /* Mismo alto para todos */
-    font-size: 16px; /* Tamaño uniforme del texto */
-    padding: 10px; /* Espaciado interno */
-    border-radius: 25px; /* Bordes redondeados */
-    border: 1px solid #ccc; /* Borde gris */
-    box-sizing: border-box; /* Evita que padding afecte el tamaño total */
+    width: 400px;  
+    height: 45px;  
+    font-size: 16px; 
+    padding: 10px;  
+    border-radius: 25px; 
+    border: 1px solid #ccc; 
+    box-sizing: border-box; 
 }
 
 

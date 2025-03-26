@@ -56,10 +56,10 @@ def nuevo_doctor():
         else:
             flash("⚠️ El nombre del doctor es obligatorio.", "warning")
     
-    # 🔹 Obtener todos los doctores de la base de datos
+    
     doctores = Doctor.query.all()
     
-    # 🔹 Enviar la lista de doctores a la plantilla
+
     return render_template('nuevo_doctor.html', doctores=doctores)
 
 # Ruta para eliminar un doctor
