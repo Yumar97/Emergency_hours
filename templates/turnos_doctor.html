@@ -1,0 +1,24 @@
+<h2>Turnos de {{ doctor.name }}</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Área</th>
+            <th>Turno</th>
+            <th>Tipo de Horas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for turno in turnos %}
+        <tr>
+            <td>{{ turno.fecha_trabajo }}</td>
+            <td>{{ turno.area }}</td>
+            <td>{{ turno.turno }}</td>
+            <td>{{ turno.tipo_horas }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('nuevo_doctor') }}">⬅️ Volver</a>

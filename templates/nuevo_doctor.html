@@ -63,6 +63,7 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Acciones</th>
+                <th>Ver Turnos</th>
             </tr>
         </thead>
         <tbody>
@@ -81,6 +82,10 @@
                         <input type="text" name="nuevo_nombre" placeholder="Nuevo nombre" required>
                         <button type="submit">✏️</button>
                     </form>
+                </td>
+                <td>
+                    <a href="{{ url_for('index', doctor_id=doctor.id) }}">📅 Ver Turnos</a>
+
                 </td>
             </tr>
             {% else %}

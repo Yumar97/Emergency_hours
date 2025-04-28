@@ -6,152 +6,568 @@
     <title>Emergencia EsSalud</title>  
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* Estilos mejorados */
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --border-radius: 5px;
+            --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            min-width: 320px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .header-container {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            height: 60px;
+            width: auto;
+        }
+        
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .form-container, .table-container, .report-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .form-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            align-items: end;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        button, .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .agregar {
+            background-color: var(--success-color);
+            color: white;
+            grid-column: 1 / -1;
+            padding: 10px;
+            font-weight: 600;
+        }
+        
+        .agregar:hover {
+            background-color: #218838;
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn:hover {
+            background-color: #004494;
+        }
+        
+        .btn-report {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-report:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-logout {
+            background-color: var(--danger-color);
+            color: white;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+        
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .styled-table th, .styled-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .styled-table th {
+            background-color: var(--primary-color);
+            color: white;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .styled-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-edit {
+            color: var(--primary-color);
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        
+        .btn-delete {
+            color: var(--danger-color);
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        
+        .no-data {
+            text-align: center;
+            color: var(--secondary-color);
+            padding: 20px;
+        }
+        
+        .report-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .report-option {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: var(--border-radius);
+        }
+        
+        .mes-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .logout-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Estilos para mensajes flash */
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: var(--border-radius);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.5s forwards;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .alert-danger {
+            background-color: var(--danger-color);
+        }
+
+        .alert-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .alert-success {
+            background-color: var(--success-color);
+        }
+
+        .alert-info {
+            background-color: #17a2b8;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 10px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .form-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-section {
+                grid-template-columns: 1fr;
+            }
+
+            .alert-container {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="header-container">
-        <img src="{{ url_for('static', filename='img/logo_essalud.png') }}" alt="Logo EsSalud" class="logo">
-        <h1>Emergencia EsSalud</h1>
-    </div>
-    
-
-    <form action="/turnos" method="POST">
-    <div class="form-container">
-        <label for="nombre">Nombre del Doctor:</label>
-        <select name="nombre" required>
-        <option value="">Seleccione un doctor</option>
-        {% for doctor in doctores %}
-        <option value="{{ doctor.name }}">{{ doctor.name }}</option>
-        {% endfor %}
-        </select>
-
-</ul>
-
-<a href="{{ url_for('nuevo_doctor') }}" class="btn">Nuevo Doctor</a>
-
-        <label for="area">Área de Atención:</label>
-        <select name="area">
-            {% for opcion in opciones %}
-                <option value="{{ opcion }}">{{ opcion }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="fecha_trabajo">Fecha de Trabajo:</label>
-        <input type="date" id="fecha_trabajo" name="fecha_trabajo" required>
-
-        <label for="horas_trabajadas">Horas Trabajadas:</label>
-        <input type="number" id="horas_trabajadas" name="horas_trabajadas" min="1" max="24" required>
-
-        <label for="turno">Turno:</label>
-        <select id="turno" name="turno" required>
-            <option value="Mañana">Mañana</option>
-            <option value="Tarde">Tarde</option>
-            <option value="Noche">Noche</option>
-        </select>
-
-        <button class="agregar">Agregar</button>
-
-    </div>
-    </form>
-    
-    <div class="table-container">
-    <h2 class="table-title">Lista de Turnos</h2>
-
-    <table class="styled-table">
-        <thead>
-            <tr>
-                <th>Doctor</th>
-                <th>Área</th>
-                <th>Fecha</th>
-                <th>Horas Trabajadas</th>
-                <th>Turno</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if turnos %}
-                {% for turno in turnos %}
-                <tr>
-                    <td>{{ turno.doctor }}</td>
-                    <td>{{ turno.area }}</td>
-                    <td>{{ turno.fecha_trabajo }}</td>
-                    <td>{{ turno.horas_trabajadas }}</td>
-                    <td>{{ turno.turno }}</td>
-                    <td>
-                        <a href="/editar/{{ turno.id }}">Editar</a> | 
-                        <a href="/borrar/{{ turno.id }}">Borrar</a>
-                    </td>
-                </tr>
+    <!-- Contenedor para mensajes flash -->
+    <div class="alert-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <span>{{ message }}</span>
+                        <button class="close-btn" onclick="this.parentElement.style.animation='slideOut 0.5s forwards'">&times;</button>
+                    </div>
                 {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="6" style="text-align: center; color: gray;">No hay turnos registrados.</td>
-                </tr>
             {% endif %}
-        </tbody>
-    </table>
-</div>
+        {% endwith %}
+    </div>
 
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='img/logo_essalud.png') }}" alt="Logo EsSalud" class="logo">
+            <h1>Emergencia EsSalud</h1>
+        </div>
         
+        <!-- Formulario de turnos -->
+        <form action="/turnos" method="POST">
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="nombre">Nombre del Doctor:</label>
+                    <select name="nombre" required>
+                        <option value="">Seleccione un doctor</option>
+                        {% for doctor in doctores %}
+                        <option value="{{ doctor.name }}">{{ doctor.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <a href="{{ url_for('nuevo_doctor') }}" class="btn"><i class="fas fa-user-plus"></i> Nuevo Doctor</a>
+
+                <!-- CAMBIO PRINCIPAL: Turno antes que Área -->
+                <div class="form-group">
+                    <label for="turno">Turno:</label>
+                    <select id="turno" name="turno" required onchange="actualizarAreas()">
+                        <option value="">Seleccione un turno</option>
+                        <option value="Mañana">Mañana</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Noche">Noche</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="area">Área de Atención:</label>
+                    <select name="area" id="area-select" required>
+                        <option value="">Seleccione un área</option>
+                        {% for opcion in opciones %}
+                            <option value="{{ opcion }}">{{ opcion }}</option>
+                        {% endfor %}
+                        <option value="G.N.">G.N.</option>
+                        <option value="Jefe G.">Jefe G.</option>
+                        <option value="Triaje">Triaje</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_trabajo">Fecha de Trabajo:</label>
+                    <input type="date" id="fecha_trabajo" name="fecha_trabajo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="horas_trabajadas">Horas Trabajadas:</label>
+                    <input type="number" name="horas_trabajadas" id="horas_trabajadas" value="6" min="1" max="12" required>
+                </div>
+
+                <button type="submit" class="agregar"><i class="fas fa-plus-circle"></i> Agregar Turno</button>
+            </div>
+        </form>
+        
+        <!-- Tabla de turnos -->
+        <div class="table-container">
+            <h2 class="table-title">Lista de Turnos</h2>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Área</th>
+                        <th>Fecha</th>
+                        <th>Horas</th>
+                        <th>Turno</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if turnos %}
+                        {% for turno in turnos %}
+                        <tr>
+                            <td>{{ turno.doctor }}</td>
+                            <td>{{ turno.area }}</td>
+                            <td>{{ turno.fecha_trabajo.strftime('%d/%m/%Y') }}</td>
+                            <td>{{ turno.horas_trabajadas }}</td>
+                            <td>{{ turno.turno }}</td>
+                            <td class="actions">
+                                <a href="/editar/{{ turno.id }}" class="btn-edit"><i class="fas fa-edit"></i></a>
+                                <a href="/borrar/{{ turno.id }}" class="btn-delete"><i class="fas fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="no-data">No hay turnos registrados.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sección de reportes -->
+        <div class="report-section">
+            <div class="report-option">
+                <h3>Ver Calendario del Mes</h3>
+                <form id="formCalendario">
+                    <div class="mes-container">
+                        <label for="mes_calendario">Selecciona un mes:</label>
+                        <select name="mes" id="mes_calendario" class="form-control">
+                            {% for i in range(1, 13) %}
+                                <option value="{{ i }}" {% if i == datetime.now().month %}selected{% endif %}>
+                                    {{ ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                                       "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"][i-1] }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn-report"><i class="fas fa-calendar-alt"></i> Ver Calendario</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="report-option">
+                <h3>Generar Reporte PDF</h3>
+                <form action="{{ url_for('reporte_mes') }}" method="get">
+                    <div class="mes-container">
+                        <label for="mes">Selecciona un mes:</label>
+                        <select name="mes" id="mes" class="form-control">
+                            {% for i in range(1, 13) %}
+                                <option value="{{ i }}" {% if i == datetime.now().month %}selected{% endif %}>
+                                    {{ ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                                       "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"][i-1] }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn-report"><i class="fas fa-file-pdf"></i> Generar PDF</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="report-option">
+                <h3>Descargar Reporte Excel</h3>
+                <div class="mes-container">
+                    <label for="mes_reporte">Selecciona un mes:</label>
+                    <select id="mes_reporte" class="form-control">
+                        {% for i in range(1, 13) %}
+                            <option value="{{ i }}" {% if i == datetime.now().month %}selected{% endif %}>
+                                {{ ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                                   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"][i-1] }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button onclick="descargarReporte()" class="btn-report">
+                        <i class="fas fa-file-excel"></i> Descargar Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cerrar sesión -->
+        <div class="logout-container">
+            <a href="{{ url_for('logout') }}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
     </div>
 
-    <h2>Ver Calendario del Mes</h2>
-    <form id="formCalendario">
-        <div class="mes-container">
-
-        <label for="mes_calendario">Selecciona un mes:</label>
-        <select name="mes" id="mes_calendario">
-            <option value="1">Enero</option>
-            <option value="2">Febrero</option>
-            <option value="3">Marzo</option>
-            <option value="4">Abril</option>
-            <option value="5">Mayo</option>
-            <option value="6">Junio</option>
-            <option value="7">Julio</option>
-            <option value="8">Agosto</option>
-            <option value="9">Septiembre</option>
-            <option value="10">Octubre</option>
-            <option value="11">Noviembre</option>
-            <option value="12">Diciembre</option>
-        </select>
-        <button type="submit">Ver Calendario</button>
-    </div>
-    </form>
-    
     <script>
+        // Función para actualizar áreas según turno seleccionado
+        function actualizarAreas() {
+            const turno = document.getElementById('turno').value;
+            const areaSelect = document.getElementById('area-select');
+            
+            if (turno === 'Noche') {
+                // Mostrar solo áreas específicas para noche
+                for (let i = 0; i < areaSelect.options.length; i++) {
+                    const option = areaSelect.options[i];
+                    if (['G.N.', 'Jefe G.', 'Triaje'].includes(option.value)) {
+                        option.style.display = '';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                }
+            } else {
+                // Mostrar todas las áreas excepto las específicas de noche
+                for (let i = 0; i < areaSelect.options.length; i++) {
+                    const option = areaSelect.options[i];
+                    if (!['G.N.', 'Jefe G.', 'Triaje'].includes(option.value)) {
+                        option.style.display = '';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                }
+            }
+            areaSelect.value = ''; // Resetear selección
+        }
+
+        // Inicializar áreas al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarAreas();
+            
+            // Establecer fecha actual por defecto
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha_trabajo').value = today;
+
+            // Configurar auto-cierre de alertas después de 5 segundos
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.animation = 'slideOut 0.5s forwards';
+                    setTimeout(() => alert.remove(), 500);
+                }, 5000);
+            });
+        });
+
+        // Función para el calendario
         document.getElementById("formCalendario").addEventListener("submit", function(event) {
             event.preventDefault();
             const mesSeleccionado = document.getElementById("mes_calendario").value;
             window.location.href = `/calendario/${mesSeleccionado}`;
         });
+
+        // Función para descargar reporte Excel
+        function descargarReporte() {
+            const mes = document.getElementById('mes_reporte').value;
+            const año = new Date().getFullYear();
+            window.location.href = `/descargar_excel?mes=${mes}&año=${año}`;
+        }
     </script>
-    
-    
-
-    <h2>Generar Reporte del Mes</h2>
-    <form action="{{ url_for('reporte_mes') }}" method="get">
-        <div class="mes-container">
-        <label for="mes">Selecciona un mes:</label>
-        <select name="mes" id="mes">
-            <option value="1">Enero</option>
-            <option value="2">Febrero</option>
-            <option value="3">Marzo</option>
-            <option value="4">Abril</option>
-            <option value="5">Mayo</option>
-            <option value="6">Junio</option>
-            <option value="7">Julio</option>
-            <option value="8">Agosto</option>
-            <option value="9">Septiembre</option>
-            <option value="10">Octubre</option>
-            <option value="11">Noviembre</option>
-            <option value="12">Diciembre</option>
-        </select>
-        <button type="submit">Ver Reporte</button>
-    </div>
-    </form>
 </body>
-
-<div style="width: 100%; display: flex; justify-content: flex-end;">
-    <a href="{{ url_for('logout') }}" class="btn btn-danger">Cerrar Sesión</a>
-</div>
-
 </html>

@@ -1,273 +1,274 @@
- 
+:root {
+    --primary-color: #0072BC;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;  /* Verde para botones de reportes */
+    --danger-color: #DC3545;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-radius: 5px;
+    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --input-radius: 25px;
+}
+
 body {
     font-family: "Trebuchet MS", "Arial", sans-serif;
-    font-size: 16px;  
-    background-color: #f1f5f9;  
+    font-size: 16px;
+    background-color: #f1f5f9;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
 }
 
 /* Encabezado */
+.header-container {
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    height: 50px;
+    width: auto;
+}
+
 h1 {
-    font-size: 2.5em;
-    color: #0072BC;  
-    text-align: center;
-    margin-top: 20px;
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 0;
 }
 
 h2 {
-    font-size: 1.8em;
+    font-size: 1.5rem;
     color: #333;
     margin-bottom: 15px;
 }
 
-/* Estilos para el encabezado con el logo y título */
-.header {
+h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* Formulario */
+.form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    align-items: end;
+}
+
+.form-group {
     display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label {
+    font-weight: bold;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+select, input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: var(--input-radius);
+    font-size: 1rem;
+    box-sizing: border-box;
+    height: 45px;
+}
+
+button, .btn {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;  
-    margin-bottom: 20px;
-}
-
-/* Logo */
-.logo {
-    height: 50px;  
-    width: auto;
-    
-}
-.header-container {
-    display: flex;
-    align-items: center; 
-    gap: 15px;  
-    justify-content: center; 
-    margin-bottom: 20px;
-    width: 100%;  
-    text-align: center;
-}
-
-
-
-/* Estilo del formulario */
-.formulario, .form-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;  
-    padding: 20px;
-}
-
-.formulario label,
-.form-container label {
-    font-weight: bold;
-    width: 200px;
-    text-align: right;
-    margin-right: 10px;
-}
-
-.formulario input,
-.formulario select,
-.form-container input,
-.form-container select {
-    width: 200px;  
-    height: 45px;
-    font-size: 16px;
-    padding: 8px;
-    border-radius: 70px;
-    border: 1px solid #ccc;
-}
-
-.formulario button,
-.mes-container button {
-    height: 40px;
-    width: 150px;
-    background-color: #0072BC;
-    color: white;
+    gap: 8px;
+    padding: 10px 15px;
     border: none;
+    border-radius: var(--input-radius);
+    font-size: 1rem;
     cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    height: 45px;
     font-weight: bold;
-    border-radius: 75px;
-    transition: background-color 0.3s;
 }
 
-.formulario button:hover,
-.mes-container button:hover {
-    background-color: #005A9C;  
+.agregar {
+    background-color: var(--primary-color);
+    color: white;
+    grid-column: 1 / -1;
+    padding: 12px;
+    margin-top: 10px;
 }
 
-/* Tabla de Turnos */
+.agregar:hover {
+    background-color: #005A9C;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn:hover {
+    background-color: #005A9C;
+}
+
+/* Botones de reportes en verde */
+.btn-report {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-report:hover {
+    background-color: #218838;
+}
+
+.btn-logout {
+    background-color: var(--danger-color);
+    color: white;
+    padding: 10px 20px;
+}
+
+.btn-logout:hover {
+    background-color: #C82333;
+}
+
+/* Tabla */
 .table-container {
-    width: 80%;
-    max-width: 1200px;
-    margin: 30px auto;
+    background-color: white;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.table-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.8em;
-    font-weight: bold;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
 }
 
 .styled-table {
     width: 100%;
-    table-layout: fixed;
     border-collapse: collapse;
+    margin-top: 10px;
 }
 
 .styled-table th, .styled-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: center;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
-.styled-table thead {
-    background-color: #0072BC;  
-    color: #fff;
-}
-
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #D4E4FA;  
-}
-
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #0072BC;
-}
-
-/* Botón de Cerrar Sesión */
-.logout-container {
-    width: 100%;
-    text-align: right;
-    padding: 20px;
-}
-
-.logout-container a {
-    background-color: #DC3545;  
-    padding: 10px 20px;
-    border-radius: 5px;
+.styled-table th {
+    background-color: var(--primary-color);
     color: white;
-    font-weight: bold;
-    text-decoration: none;
+    position: sticky;
+    top: 100px;
 }
 
-.logout-container a:hover {
-    background-color: #C82333;  
+.styled-table tr:hover {
+    background-color: #f5f5f5;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .formulario, .form-container {
-        justify-content: center;
-    }
-
-    .formulario label,
-    .form-container label {
-        width: 100%;  
-        text-align: left;
-    }
-
-    .formulario input,
-    .formulario select,
-    .form-container input,
-    .form-container select {
-        width: 100%;  
-    }
-
-    .styled-table th, .styled-table td {
-        padding: 10px;
-    }
-
-    .table-container {
-        width: 90%;
-    }
-}
-
-/* Ajuste para el contenedor del mes */
-.mes-container {
+.actions {
     display: flex;
-    align-items: center;
     gap: 10px;
 }
 
-.mes-container select,
-.mes-container button {
-    padding: 8px 12px;
-    font-size: 16px;
-}
-
-.mes-container button {
-    background-color: #0072BC;  
-    color: white;
+.btn-edit {
+    color: var(--primary-color);
+    background: none;
     border: none;
+    font-size: 1.1rem;
     cursor: pointer;
-    border-radius: 5px;
 }
 
-.mes-container button:hover {
-    background-color: #005A9C;  
-}
-
-
-/* Botón Agregar  */
-button.agregar {
-    height: 40px;
-    width: 150px;
-    background-color: #0072BC;  
-    color: white;
+.btn-delete {
+    color: var(--danger-color);
+    background: none;
     border: none;
+    font-size: 1.1rem;
     cursor: pointer;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: background-color 0.3s;
 }
 
-button.agregar:hover {
-    background-color: #005A9C;  
+.no-data {
+    text-align: center;
+    color: var(--secondary-color);
+    padding: 20px;
 }
 
-/* Estilos generales para inputs, selects y botones */
-input, select, button {
-    width: 200px;  
-    height: 35px; 
-    font-size: 16px;  
-    padding: 4px;  
-    border-radius: 100px; 
-    border: 1px solid #ccc; 
+/* Reportes */
+.report-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
 }
 
-
-/* Estilo adicional para los botones */
-button {
-    background-color: #0072BC;  
-    color: white;  
-    font-weight: bold;  
-    cursor: pointer; 
-    transition: background-color 0.3s;  
+.report-option {
+    background-color: var(--light-color);
+    padding: 15px;
+    border-radius: var(--border-radius);
 }
 
-/* Cambio de color cuando el mouse pasa sobre los botones */
-button:hover {
-    background-color: #005A9C;  
+.mes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-
-
-
-.formulario input,
-.formulario select,
-.form-container input,
-.form-container select {
-    width: 400px;  
-    height: 45px;  
-    font-size: 16px; 
-    padding: 10px;  
-    border-radius: 25px; 
-    border: 1px solid #ccc; 
-    box-sizing: border-box; 
+.mes-container select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: var(--input-radius);
+    font-size: 1rem;
+    height: 45px;
 }
 
+/* Cerrar sesión */
+.logout-container {
+    text-align: center;
+    margin-top: 20px;
+}
 
+/* Responsive */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+    
+    .form-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .report-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .styled-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
