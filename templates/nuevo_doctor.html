@@ -34,24 +34,55 @@
             color: green;
             font-weight: bold;
         }
+        /* Added styling for better spacing and alignment of the form fields */
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-group label {
+            width: 120px;
+            text-align: right;
+        }
+        .form-group input {
+            padding: 5px;
+            width: 200px;
+        }
     </style>
 </head>
 <body>
 
     <h1>Registrar Nuevo Doctor</h1>
 
-   
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <p class="mensaje">{{ message }}</p>
-            {% endfor %}
-        {% endif %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        {% endfor %}
+        <script>
+            // Ocultar alertas después de 5 segundos
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 5000);
+        </script>
+    {% endif %}
     {% endwith %}
 
     <form action="{{ url_for('nuevo_doctor') }}" method="POST">
-        <label for="nombre">Nombre del Doctor:</label>
-        <input type="text" id="nombre" name="nombre" required>
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required>
+        </div>
         <button class="agregar">Agregar</button>
     </form>
 
@@ -72,12 +103,9 @@
                 <td>{{ doctor.id }}</td>
                 <td>{{ doctor.name }}</td>
                 <td class="acciones">
-                  
                     <form action="{{ url_for('eliminar_doctor', id=doctor.id) }}" method="POST">
                         <button type="submit" onclick="return confirm('¿Estás seguro de eliminar este doctor?')">🗑️</button>
                     </form>
-
-                 
                     <form action="{{ url_for('editar_doctor', id=doctor.id) }}" method="POST">
                         <input type="text" name="nuevo_nombre" placeholder="Nuevo nombre" required>
                         <button type="submit">✏️</button>
@@ -85,7 +113,6 @@
                 </td>
                 <td>
                     <a href="{{ url_for('index', doctor_id=doctor.id) }}">📅 Ver Turnos</a>
-
                 </td>
             </tr>
             {% else %}

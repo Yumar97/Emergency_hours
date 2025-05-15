@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* Estilos mejorados */
         :root {
             --primary-color: #0056b3;
             --secondary-color: #6c757d;
@@ -17,6 +16,8 @@
             --danger-color: #dc3545;
             --light-color: #f8f9fa;
             --dark-color: #343a40;
+            --normal-color: #e2efda;
+            --extra-color: #c6efce;
             --border-radius: 5px;
             --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
@@ -77,7 +78,7 @@
             margin-bottom: 10px;
         }
         
-        .form-container, .table-container, .report-section {
+        .form-container, .table-container, .report-section, .filter-container {
             background-color: white;
             padding: 20px;
             border-radius: var(--border-radius);
@@ -92,6 +93,13 @@
             align-items: end;
         }
         
+        .filter-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        
         label {
             display: block;
             margin-bottom: 5px;
@@ -99,13 +107,73 @@
             color: var(--secondary-color);
         }
         
-        select, input {
+        select, input[type="date"], input[type="number"] {
             width: 100%;
             padding: 8px 12px;
             border: 1px solid #ddd;
             border-radius: var(--border-radius);
             font-size: 1rem;
             box-sizing: border-box;
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-button:hover {
+            background-color: #004494;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        
+        .dropdown-content.show {
+            display: block;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
         }
         
         button, .btn {
@@ -163,12 +231,33 @@
             background-color: #c82333;
         }
         
+        .btn-filter {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-filter:hover {
+            background-color: #004494;
+        }
+        
+        .btn-reset {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        
+        .btn-reset:hover {
+            background-color: #5a6268;
+        }
+        
         .styled-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-        
         .styled-table th, .styled-table td {
             padding: 12px 15px;
             text-align: left;
@@ -186,25 +275,32 @@
             background-color: #f5f5f5;
         }
         
+        .styled-table tr.normal {
+            background-color: var(--normal-color);
+        }
+        
+        .styled-table tr.extra {
+            background-color: var(--extra-color);
+        }
+        
         .actions {
             display: flex;
             gap: 10px;
         }
         
-        .btn-edit {
-            color: var(--primary-color);
+        .btn-edit, .btn-delete {
             background: none;
             border: none;
             font-size: 1.1rem;
             cursor: pointer;
         }
         
+        .btn-edit {
+            color: var(--primary-color);
+        }
+        
         .btn-delete {
             color: var(--danger-color);
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            cursor: pointer;
         }
         
         .no-data {
@@ -236,7 +332,6 @@
             margin-top: 20px;
         }
 
-        /* Estilos para mensajes flash */
         .alert-container {
             position: fixed;
             top: 20px;
@@ -311,11 +406,13 @@
             .header-container {
                 flex-direction: column;
                 text-align: center;
-                padding: 15px;
+                padding: 10px;
             }
             
-            .form-container {
+            .form-container, .filter-container {
                 grid-template-columns: 1fr;
+                flex-direction: column;
+                gap: 10px;
             }
             
             .report-section {
@@ -328,18 +425,27 @@
                 left: 10px;
                 max-width: none;
             }
+
+            .dropdown-content {
+                min-width: 100%;
+                left: 0;
+            }
+
+            .styled-table th, .styled-table td {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Contenedor para mensajes flash -->
     <div class="alert-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="alert alert-{{ category }}">
                         <span>{{ message }}</span>
-                        <button class="close-btn" onclick="this.parentElement.style.animation='slideOut 0.5s forwards'">&times;</button>
+                        <button class="close-btn" onclick="this.parentElement.style.animation='slideOut 0.5s forwards'; setTimeout(() => this.parentElement.remove(), 500);">×</button>
                     </div>
                 {% endfor %}
             {% endif %}
@@ -347,18 +453,17 @@
     </div>
 
     <div class="container">
-        <!-- Encabezado -->
         <div class="header-container">
             <img src="{{ url_for('static', filename='img/logo_essalud.png') }}" alt="Logo EsSalud" class="logo">
             <h1>Emergencia EsSalud</h1>
         </div>
         
-        <!-- Formulario de turnos -->
-        <form action="/turnos" method="POST">
+        <form action="/turnos" method="POST" id="turnoForm" onsubmit="updateScrollPosition(this)">
             <div class="form-container">
+                <input type="hidden" name="scroll_position" class="scroll-position">
                 <div class="form-group">
                     <label for="nombre">Nombre del Doctor:</label>
-                    <select name="nombre" required>
+                    <select name="nombre" id="nombre" required>
                         <option value="">Seleccione un doctor</option>
                         {% for doctor in doctores %}
                         <option value="{{ doctor.name }}">{{ doctor.name }}</option>
@@ -368,14 +473,13 @@
                 
                 <a href="{{ url_for('nuevo_doctor') }}" class="btn"><i class="fas fa-user-plus"></i> Nuevo Doctor</a>
 
-                <!-- CAMBIO PRINCIPAL: Turno antes que Área -->
                 <div class="form-group">
                     <label for="turno">Turno:</label>
                     <select id="turno" name="turno" required onchange="actualizarAreas()">
                         <option value="">Seleccione un turno</option>
-                        <option value="Mañana">Mañana</option>
-                        <option value="Tarde">Tarde</option>
-                        <option value="Noche">Noche</option>
+                        <option value="MAÑANA">Mañana</option>
+                        <option value="TARDE">Tarde</option>
+                        <option value="NOCHE">Noche</option>
                     </select>
                 </div>
 
@@ -383,12 +487,12 @@
                     <label for="area">Área de Atención:</label>
                     <select name="area" id="area-select" required>
                         <option value="">Seleccione un área</option>
-                        {% for opcion in opciones %}
-                            <option value="{{ opcion }}">{{ opcion }}</option>
+                        {% for opcion in opciones_diurnas %}
+                            <option value="{{ opcion }}" class="area-diurna">{{ opcion }}</option>
                         {% endfor %}
-                        <option value="G.N.">G.N.</option>
-                        <option value="Jefe G.">Jefe G.</option>
-                        <option value="Triaje">Triaje</option>
+                        {% for opcion in opciones_nocturnas %}
+                            <option value="{{ opcion }}" class="area-nocturna" style="display: none;">{{ opcion }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -402,13 +506,81 @@
                     <input type="number" name="horas_trabajadas" id="horas_trabajadas" value="6" min="1" max="12" required>
                 </div>
 
+                <div class="form-group">
+                    <div class="checkbox-container">
+                        <div class="checkbox-group">
+                            <input type="checkbox" name="horas_normales" id="horas_normales" value="Normal">
+                            <label for="horas_normales">Horas Normales</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" name="horas_extras" id="horas_extras" value="Extra">
+                            <label for="horas_extras">Horas Extras</label>
+                        </div>
+                    </div>
+                </div>
+
                 <button type="submit" class="agregar"><i class="fas fa-plus-circle"></i> Agregar Turno</button>
             </div>
         </form>
         
-        <!-- Tabla de turnos -->
         <div class="table-container">
             <h2 class="table-title">Lista de Turnos</h2>
+            <div class="filter-container">
+                <form action="/" method="GET" class="form-group">
+                    <div class="dropdown">
+                        <button type="button" class="dropdown-button" onclick="toggleDropdown('doctor-dropdown')">
+                            <i class="fas fa-user-md"></i> Filtrar por Doctor
+                        </button>
+                        <div id="doctor-dropdown" class="dropdown-content">
+                            <div class="checkbox-container">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" name="doctor_filtro" id="doctor_todos" value="todos"
+                                           {% if 'todos' in doctor_filtro %}checked{% endif %}
+                                           onchange="toggleDoctorCheckboxes()">
+                                    <label for="doctor_todos">Todos los doctores</label>
+                                </div>
+                                {% for doctor in doctores %}
+                                <div class="checkbox-group">
+                                    <input type="checkbox" name="doctor_filtro" id="doctor_{{ doctor.name|replace(' ', '_') }}"
+                                           value="{{ doctor.name }}"
+                                           {% if doctor.name in doctor_filtro %}checked{% endif %}
+                                           {% if 'todos' in doctor_filtro %}disabled{% endif %}>
+                                    <label for="doctor_{{ doctor.name|replace(' ', '_') }}">{{ doctor.name }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" class="btn-filter"><i class="fas fa-filter"></i> Aplicar Filtro</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <form action="/" method="GET" class="form-group">
+                    <div class="dropdown">
+                        <button type="button" class="dropdown-button" onclick="toggleDropdown('mes-dropdown')">
+                            <i class="fas fa-calendar-alt"></i> Filtrar por Mes
+                        </button>
+                        <div id="mes-dropdown" class="dropdown-content">
+                            <div class="checkbox-container">
+                                {% for i in range(1, 13) %}
+                                <div class="checkbox-group">
+                                    <input type="checkbox" name="mes_filtro" id="mes_{{ i }}"
+                                           value="{{ i }}"
+                                           {% if i|string in mes_filtro %}checked{% endif %}>
+                                    <label for="mes_{{ i }}">
+                                        {{ ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                                           "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"][i-1] }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" class="btn-filter"><i class="fas fa-filter"></i> Aplicar Filtro</button>
+                        </div>
+                    </div>
+                </form>
+                
+                <a href="{{ url_for('index') }}" class="btn-reset"><i class="fas fa-undo"></i> Restablecer Filtros</a>
+            </div>
+            
             <table class="styled-table">
                 <thead>
                     <tr>
@@ -417,34 +589,38 @@
                         <th>Fecha</th>
                         <th>Horas</th>
                         <th>Turno</th>
+                        <th>Tipo de Horas</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if turnos %}
                         {% for turno in turnos %}
-                        <tr>
+                        <tr class="{{ 'extra' if turno.tipo_horas == 'Extra' else 'normal' }}">
                             <td>{{ turno.doctor }}</td>
                             <td>{{ turno.area }}</td>
                             <td>{{ turno.fecha_trabajo.strftime('%d/%m/%Y') }}</td>
                             <td>{{ turno.horas_trabajadas }}</td>
                             <td>{{ turno.turno }}</td>
+                            <td>{{ turno.tipo_horas }}</td>
                             <td class="actions">
-                                <a href="/editar/{{ turno.id }}" class="btn-edit"><i class="fas fa-edit"></i></a>
-                                <a href="/borrar/{{ turno.id }}" class="btn-delete"><i class="fas fa-trash-alt"></i></a>
+                                <a href="{{ url_for('editar_turno', id=turno.id, scroll_position=scroll_position) }}" class="btn-edit"><i class="fas fa-edit"></i></a>
+                                <form action="{{ url_for('borrar_turno', id=turno.id) }}" method="POST" style="display:inline;" onsubmit="updateScrollPosition(this)">
+                                    <input type="hidden" name="scroll_position" class="scroll-position">
+                                    <button type="submit" class="btn-delete" onclick="return confirm('¿Está seguro de eliminar este turno?')"><i class="fas fa-trash-alt"></i></button>
+                                </form>
                             </td>
                         </tr>
                         {% endfor %}
                     {% else %}
                         <tr>
-                            <td colspan="6" class="no-data">No hay turnos registrados.</td>
+                            <td colspan="7" class="no-data">No hay turnos registrados para los filtros seleccionados.</td>
                         </tr>
                     {% endif %}
                 </tbody>
             </table>
         </div>
 
-        <!-- Sección de reportes -->
         <div class="report-section">
             <div class="report-option">
                 <h3>Ver Calendario del Mes</h3>
@@ -465,7 +641,32 @@
             </div>
             
             <div class="report-option">
-                <h3>Generar Reporte PDF</h3>
+                <h3>Ver Calendario Semanal</h3>
+                <form id="formCalendarioSemanal">
+                    <div class="mes-container">
+                        <label for="mes_calendario_semanal">Selecciona un mes:</label>
+                        <select name="mes" id="mes_calendario_semanal" class="form-control">
+                            {% for i in range(1, 13) %}
+                                <option value="{{ i }}" {% if i == datetime.now().month %}selected{% endif %}>
+                                    {{ ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                                       "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"][i-1] }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label for="doctor_calendario">Selecciona un doctor:</label>
+                        <select name="doctor" id="doctor_calendario" class="form-control" required>
+                            <option value="">Seleccione un doctor</option>
+                            {% for doctor in doctores %}
+                                <option value="{{ doctor.name }}">{{ doctor.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn-report"><i class="fas fa-calendar-week"></i> Ver Calendario Semanal</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="report-option">
+                <h3>Ver Reporte del Mes</h3>
                 <form action="{{ url_for('reporte_mes') }}" method="get">
                     <div class="mes-container">
                         <label for="mes">Selecciona un mes:</label>
@@ -477,7 +678,7 @@
                                 </option>
                             {% endfor %}
                         </select>
-                        <button type="submit" class="btn-report"><i class="fas fa-file-pdf"></i> Generar PDF</button>
+                        <button type="submit" class="btn-report"><i class="fas fa-file-alt"></i> Ver Reporte</button>
                     </div>
                 </form>
             </div>
@@ -501,42 +702,12 @@
             </div>
         </div>
 
-        <!-- Cerrar sesión -->
         <div class="logout-container">
             <a href="{{ url_for('logout') }}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
         </div>
     </div>
 
     <script>
-        // Función para actualizar áreas según turno seleccionado
-        function actualizarAreas() {
-            const turno = document.getElementById('turno').value;
-            const areaSelect = document.getElementById('area-select');
-            
-            if (turno === 'Noche') {
-                // Mostrar solo áreas específicas para noche
-                for (let i = 0; i < areaSelect.options.length; i++) {
-                    const option = areaSelect.options[i];
-                    if (['G.N.', 'Jefe G.', 'Triaje'].includes(option.value)) {
-                        option.style.display = '';
-                    } else {
-                        option.style.display = 'none';
-                    }
-                }
-            } else {
-                // Mostrar todas las áreas excepto las específicas de noche
-                for (let i = 0; i < areaSelect.options.length; i++) {
-                    const option = areaSelect.options[i];
-                    if (!['G.N.', 'Jefe G.', 'Triaje'].includes(option.value)) {
-                        option.style.display = '';
-                    } else {
-                        option.style.display = 'none';
-                    }
-                }
-            }
-            areaSelect.value = ''; // Resetear selección
-        }
-
         // Inicializar áreas al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
             actualizarAreas();
@@ -545,29 +716,121 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('fecha_trabajo').value = today;
 
-            // Configurar auto-cierre de alertas después de 5 segundos
+            // Configurar auto-cierre de alertas después de 3 segundos
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
                 setTimeout(() => {
                     alert.style.animation = 'slideOut 0.5s forwards';
                     setTimeout(() => alert.remove(), 500);
-                }, 5000);
+                }, 3000);
             });
         });
 
-        // Función para el calendario
-        document.getElementById("formCalendario").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const mesSeleccionado = document.getElementById("mes_calendario").value;
-            window.location.href = `/calendario/${mesSeleccionado}`;
+        function actualizarAreas() {
+            const turno = document.getElementById('turno').value;
+            const areaSelect = document.getElementById('area-select');
+            const diurnas = document.querySelectorAll('.area-diurna');
+            const nocturnas = document.querySelectorAll('.area-nocturna');
+
+            areaSelect.value = '';
+            diurnas.forEach(option => option.style.display = turno === 'NOCHE' ? 'none' : '');
+            nocturnas.forEach(option => option.style.display = turno === 'NOCHE' ? '' : 'none');
+        }
+
+        function manejarCheckboxes() {
+            const horasNormales = document.getElementById('horas_normales');
+            const horasExtras = document.getElementById('horas_extras');
+
+            horasNormales.addEventListener('change', function() {
+                if (this.checked) horasExtras.checked = false;
+            });
+
+            horasExtras.addEventListener('change', function() {
+                if (this.checked) horasNormales.checked = false;
+            });
+        }
+
+        function validarFormulario() {
+            const form = document.getElementById('turnoForm');
+            const horasNormales = document.getElementById('horas_normales');
+            const horasExtras = document.getElementById('horas_extras');
+
+            form.addEventListener('submit', function(e) {
+                if (!horasNormales.checked && !horas_extras.checked) {
+                    e.preventDefault();
+                    alert('Por favor, seleccione un tipo de horas (Normales o Extras).');
+                }
+            });
+        }
+
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const allDropdowns = document.querySelectorAll('.dropdown-content');
+            allDropdowns.forEach(d => {
+                if (d.id !== dropdownId) d.classList.remove('show');
+            });
+            dropdown.classList.toggle('show');
+        }
+
+        function toggleDoctorCheckboxes() {
+            const todosCheckbox = document.getElementById('doctor_todos');
+            const doctorCheckboxes = document.querySelectorAll('input[name="doctor_filtro"]:not(#doctor_todos)');
+
+            doctorCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.disabled = todosCheckbox.checked;
+            });
+        }
+
+        function updateScrollPosition(form) {
+            const scrollPositionInput = form.querySelector('.scroll-position');
+            scrollPositionInput.value = window.scrollY || window.pageYOffset;
+        }
+
+        document.getElementById('formCalendarioSemanal').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const mes = document.getElementById('mes_calendario_semanal').value;
+            const doctor = document.getElementById('doctor_calendario').value;
+            if (doctor) {
+                window.location.href = `/calendario_semanal/${mes}/${encodeURIComponent(doctor)}`;
+            } else {
+                alert('Por favor, seleccione un doctor.');
+            }
         });
 
-        // Función para descargar reporte Excel
+        document.getElementById('formCalendario').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const mes = document.getElementById('mes_calendario').value;
+            window.location.href = `/calendario/${mes}`;
+        });
+
         function descargarReporte() {
             const mes = document.getElementById('mes_reporte').value;
-            const año = new Date().getFullYear();
-            window.location.href = `/descargar_excel?mes=${mes}&año=${año}`;
+            window.location.href = `/descargar_excel?mes=${mes}`;
         }
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const scrollPosition = urlParams.get('scroll_position');
+            if (scrollPosition) {
+                window.scrollTo({ top: parseInt(scrollPosition), behavior: 'smooth' });
+            }
+            manejarCheckboxes();
+            actualizarAreas();
+            validarFormulario();
+        };
+
+        document.addEventListener('click', function(event) {
+            const dropdowns = document.querySelectorAll('.dropdown-content');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.contains(event.target) && !event.target.closest('.dropdown-button')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
     </script>
+    <footer>
+        <p>© 2025 Essalud. Desarrollado por Yumar Manrique Araujo.</p>
+    </footer>
 </body>
 </html>

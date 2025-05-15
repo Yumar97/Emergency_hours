@@ -1,31 +1,47 @@
+/* General Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 :root {
-    --primary-color: #0072BC;
-    --secondary-color: #6c757d;
-    --success-color: #28a745;  /* Verde para botones de reportes */
-    --danger-color: #DC3545;
-    --light-color: #f8f9fa;
-    --dark-color: #343a40;
-    --border-radius: 5px;
-    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --primary-color: #0072BC; /* EsSalud blue */
+    --secondary-color: #6C757D; /* Neutral gray */
+    --success-color: #28A745; /* Green for reports */
+    --danger-color: #DC3545; /* Red for logout/delete */
+    --light-color: #F8F9FA; /* Light background */
+    --dark-color: #343A40; /* Dark text/accents */
+    --white: #FFFFFF; /* Pure white */
+    --border-color: #E0E0E0; /* Light border */
+    --shadow-color: rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    --border-radius: 8px; /* Increased for modern look */
     --input-radius: 25px;
+    --spacing-unit: 15px; /* Base spacing unit */
+    --transition: all 0.3s ease; /* Smooth transitions */
 }
 
 body {
-    font-family: "Trebuchet MS", "Arial", sans-serif;
+    font-family: 'Roboto', 'Trebuchet MS', 'Arial', sans-serif;
     font-size: 16px;
-    background-color: #f1f5f9;
+    background-color: #F1F5F9;
     margin: 0;
-    padding: 20px;
+    padding: var(--spacing-unit);
     line-height: 1.6;
+    color: var(--dark-color);
 }
 
+/* Container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: calc(var(--spacing-unit) * 1.5);
 }
+
+
+
 
 /* Encabezado */
 .header-container {
@@ -42,37 +58,67 @@ body {
     z-index: 100;
 }
 
-.logo {
-    height: 50px;
-    width: auto;
+.header-container:hover {
+    box-shadow: 0 6px 16px var(--shadow-color);
 }
 
-h1 {
-    font-size: 1.8rem;
-    color: var(--primary-color);
+.header-title {
+    position: absolute; /* Center the title */
+    left: 50%;
+    transform: translateX(-50%);
     margin: 0;
 }
 
+.logo {
+    height: 50px;
+    width: auto;
+    transition: var(--transition);
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+h1 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-unit) / 2;
+}
+
 h2 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 15px;
+    font-size: 1.6rem;
+    color: var(--dark-color);
+    margin-bottom: calc(var(--spacing-unit) / 2);
+    font-weight: 600;
+    border-left: 5px solid var(--primary-color);
+    padding-left: calc(var(--spacing-unit) / 2);
 }
 
 h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    font-size: 1.3rem;
+    color: var(--dark-color);
+    margin-bottom: calc(var(--spacing-unit) / 2);
+    font-weight: 500;
 }
 
-/* Formulario */
+/* Form Container */
 .form-container {
-    background-color: white;
-    padding: 20px;
+    background-color: var(--white);
+    padding: var(--spacing-unit);
     border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 4px 12px var(--shadow-color);
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
+    gap: var(--spacing-unit);
     align-items: end;
 }
 
@@ -83,112 +129,140 @@ h3 {
 }
 
 label {
-    font-weight: bold;
+    font-weight: 600;
     color: var(--secondary-color);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-select, input {
+select,
+input {
     width: 100%;
     padding: 10px 15px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: var(--input-radius);
     font-size: 1rem;
     box-sizing: border-box;
     height: 45px;
+    transition: var(--transition);
+    background-color: var(--white);
 }
 
-button, .btn {
+select:focus,
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(0, 114, 188, 0.3);
+}
+
+/* Buttons */
+button,
+.btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 10px 15px;
+    padding: 10px 20px;
     border: none;
     border-radius: var(--input-radius);
     font-size: 1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     text-decoration: none;
+    font-weight: 600;
     height: 45px;
-    font-weight: bold;
+    box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 .agregar {
     background-color: var(--primary-color);
-    color: white;
+    color: var(--white);
     grid-column: 1 / -1;
-    padding: 12px;
-    margin-top: 10px;
+    padding: 12px 20px;
+    margin-top: var(--spacing-unit);
 }
 
 .agregar:hover {
     background-color: #005A9C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 .btn {
     background-color: var(--primary-color);
-    color: white;
+    color: var(--white);
 }
 
 .btn:hover {
     background-color: #005A9C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
-/* Botones de reportes en verde */
 .btn-report {
     background-color: var(--success-color);
-    color: white;
+    color: var(--white);
 }
 
 .btn-report:hover {
     background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
 .btn-logout {
     background-color: var(--danger-color);
-    color: white;
+    color: var(--white);
     padding: 10px 20px;
 }
 
 .btn-logout:hover {
     background-color: #C82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
 }
 
-/* Tabla */
+/* Table */
 .table-container {
-    background-color: white;
-    padding: 20px;
+    background-color: var(--white);
+    padding: var(--spacing-unit);
     border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .styled-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin-top: calc(var(--spacing-unit) / 2);
 }
 
-.styled-table th, .styled-table td {
+.styled-table th,
+.styled-table td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
 }
 
 .styled-table th {
     background-color: var(--primary-color);
-    color: white;
+    color: var(--white);
     position: sticky;
-    top: 100px;
+    top: 75px; /* Adjusted to account for header height */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
 }
 
 .styled-table tr:hover {
-    background-color: #f5f5f5;
+    background-color: #F1F5F9;
+    transition: var(--transition);
 }
 
 .actions {
     display: flex;
-    gap: 10px;
+    gap: var(--spacing-unit) / 2;
 }
 
 .btn-edit {
@@ -197,6 +271,12 @@ button, .btn {
     border: none;
     font-size: 1.1rem;
     cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-edit:hover {
+    color: #005A9C;
+    transform: scale(1.1);
 }
 
 .btn-delete {
@@ -205,70 +285,350 @@ button, .btn {
     border: none;
     font-size: 1.1rem;
     cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-delete:hover {
+    color: #C82333;
+    transform: scale(1.1);
 }
 
 .no-data {
     text-align: center;
     color: var(--secondary-color);
-    padding: 20px;
+    padding: var(--spacing-unit);
+    font-size: 1.1rem;
+    font-style: italic;
 }
 
-/* Reportes */
+/* Report Section */
 .report-section {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    background-color: white;
-    padding: 20px;
+    gap: var(--spacing-unit);
+    background-color: var(--white);
+    padding: var(--spacing-unit);
     border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
+    box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .report-option {
     background-color: var(--light-color);
-    padding: 15px;
+    padding: var(--spacing-unit);
     border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.report-option:hover {
+    background-color: #E9ECEF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 .mes-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--spacing-unit) / 2;
 }
 
 .mes-container select {
     width: 100%;
     padding: 10px 15px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: var(--input-radius);
     font-size: 1rem;
     height: 45px;
+    transition: var(--transition);
 }
 
-/* Cerrar sesión */
+.mes-container select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(0, 114, 188, 0.3);
+}
+
+/* Logout Container */
 .logout-container {
     text-align: center;
-    margin-top: 20px;
+    margin-top: var(--spacing-unit);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive Design */
+@media (max-width: 1024px) {
     .header-container {
         flex-direction: column;
         text-align: center;
-        padding: 15px;
+        padding: calc(var(--spacing-unit) * 0.75);
     }
-    
+
+    .header-title {
+        position: static; /* Reset absolute positioning for smaller screens */
+        transform: none;
+    }
+
     .form-container {
         grid-template-columns: 1fr;
     }
-    
+
     .report-section {
         grid-template-columns: 1fr;
     }
-    
-    .styled-table {
-        display: block;
-        overflow-x: auto;
+
+    .styled-table th {
+        top: 50px; /* Adjust for smaller header */
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: calc(var(--spacing-unit) / 2);
+    }
+
+    .container {
+        gap: var(--spacing-unit);
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    .header-container {
+        gap: calc(var(--spacing-unit) / 2);
+    }
+
+    .form-container,
+    .table-container,
+    .report-section,
+    .report-option {
+        padding: calc(var(--spacing-unit) * 0.75);
+    }
+
+    .styled-table th,
+    .styled-table td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .styled-table th {
+        top: 40px;
+    }
+
+    button,
+    .btn,
+    select,
+    input {
+        font-size: 0.95rem;
+        height: 40px;
+    }
+
+    .agregar {
+        padding: 10px;
+    }
+
+    .no-data {
+        font-size: 1rem;
+        padding: calc(var(--spacing-unit) * 0.75);
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    .styled-table th,
+    .styled-table td {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+
+    button,
+    .btn,
+    select,
+    input {
+        font-size: 0.9rem;
+        height: 35px;
+        padding: 8px 12px;
+    }
+
+    .agregar {
+        padding: 8px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===========================
+   Calendario Semanal Styles
+   =========================== */
+
+.calendar-wrapper {
+    background-color: var(--white);
+    padding: var(--spacing-unit);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    overflow-x: auto;
+    margin-bottom: var(--spacing-unit);
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.calendar-table th,
+.calendar-table td {
+    border: 1px solid var(--border-color);
+    padding: 12px 10px;
+    text-align: center;
+    vertical-align: top;
+    transition: var(--transition);
+}
+
+.calendar-table th {
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-transform: uppercase;
+    font-weight: 600;
+    position: sticky;
+    top: 70px; /* Ajuste si hay encabezado fijo */
+    z-index: 1;
+}
+
+.calendar-table td {
+    background-color: var(--light-color);
+    min-height: 120px;
+    position: relative;
+    padding: 10px;
+}
+
+/* ----------------------------
+   Tipos de Turnos (Colores)
+   ---------------------------- */
+
+/* Turno normal día */
+.turno-normal-dia {
+    background-color: #E2EFDA; /* verde suave */
+    border-left: 4px solid #28a745;
+    padding: 6px;
+    border-radius: var(--border-radius);
+    margin-bottom: 6px;
+}
+
+/* Turno extra día */
+.turno-extra-dia {
+    background-color: #D1E7DD; /* verde-menta */
+    border-left: 4px solid #20c997;
+    padding: 6px;
+    border-radius: var(--border-radius);
+    margin-bottom: 6px;
+}
+
+/* Turno normal noche */
+.turno-normal-noche {
+    background-color: #F8D7DA; /* rosa claro */
+    border-left: 4px solid #dc3545;
+    padding: 6px;
+    border-radius: var(--border-radius);
+    margin-bottom: 6px;
+}
+
+/* Turno extra noche */
+.turno-extra-noche {
+    background-color: #FDEBD0; /* anaranjado claro */
+    border-left: 4px solid #fd7e14;
+    padding: 6px;
+    border-radius: var(--border-radius);
+    margin-bottom: 6px;
+}
+
+/* ----------------------------
+   Contenido del turno
+   ---------------------------- */
+
+.turno-doctor {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 4px;
+    display: block;
+}
+
+.turno-hora {
+    font-size: 0.85rem;
+    color: var(--secondary-color);
+    display: block;
+}
+
+/* ----------------------------
+   Día sin turno
+   ---------------------------- */
+
+.calendar-table td.empty {
+    background-color: #f1f1f1;
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+/* ----------------------------
+   Responsive Design
+   ---------------------------- */
+
+@media (max-width: 768px) {
+    .calendar-table th,
+    .calendar-table td {
+        font-size: 0.9rem;
+        padding: 8px 6px;
+    }
+
+    .turno-doctor {
+        font-size: 0.9rem;
+    }
+
+    .turno-hora {
+        font-size: 0.8rem;
     }
 }

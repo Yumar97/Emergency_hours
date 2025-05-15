@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario de Turnos</title>
-    
+    <title>Calendario de Turnos - {{ nombre_mes }} {{ year }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <style>
         .calendar {
@@ -38,12 +38,14 @@
             margin-bottom: 5px;
         }
 
-      
         .has-turno {
             background-color: #D4E4FA;
         }
 
-       
+        .empty {
+            background-color: #f0f0f0;
+        }
+
         .info-btn {
             display: block;
             width: 90%;
@@ -60,7 +62,6 @@
             filter: brightness(85%);
         }
 
-        
         .volver {
             display: block;
             margin-top: 20px;
@@ -74,6 +75,18 @@
         .volver:hover {
             text-decoration: underline;
         }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
     <script>
         function mostrarInformacion(doctor, area, horas, turno, fecha) {
@@ -86,53 +99,49 @@
     </script>
 </head>
 <body>
-    <h1>Calendario de {{ nombre_mes }} {{ year }}</h1>
+    <div class="container">
+        <h1>Calendario de {{ nombre_mes }} {{ year }}</h1>
 
-    <table class="calendar">
-        <tr>
-            <th>Domingo</th>
-            <th>Lunes</th>
-            <th>Martes</th>
-            <th>Miércoles</th>
-            <th>Jueves</th>
-            <th>Viernes</th>
-            <th>Sábado</th>
-        </tr>
-        <tr>
-            {% for _ in range(primer_dia_semana) %}
-                <td class="empty"></td>
-            {% endfor %}
-            {% for dia in range(1, dias_del_mes + 1) %}
-                <td>
-                    <strong>{{ dia }}</strong>
-                    {% for turno in turnos %}
-                        {% if turno.fecha_trabajo.day == dia %}
-                            {% set apellido = turno.doctor.split()[-1] %}
-                            <button class="info-btn" 
-                                style="background-color: {{ colores_doctores.get(turno.doctor, '#FF5733') }}"
-                                onclick="mostrarInformacion(
-                                '{{ turno.doctor | e }}',
-                                '{{ turno.area | e }}',
-                                '{{ turno.horas_trabajadas }}',
-                                '{{ turno.turno | e }}',
-                                '{{ turno.fecha_trabajo.strftime('%Y-%m-%d') }}'
-                                );">
-                                Información ({{ apellido }})
-                            </button>
-                        {% endif %}
+        <table class="calendar">
+            <tr>
+                <th>Domingo</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th>Sábado</th>
+            </tr>
+            {% for semana in semanas %}
+                <tr>
+                    {% for dia in semana %}
+                        <td {% if dia and dia.turnos %}class="has-turno"{% elif not dia %}class="empty"{% endif %}>
+                            {% if dia %}
+                                <strong>{{ dia.dia }}</strong>
+                                {% for turno in dia.turnos %}
+                                    {% set apellido = turno.doctor.split()[-1] %}
+                                    <button class="info-btn" 
+                                        style="background-color: {{ colores_doctores.get(turno.doctor, '#FF5733') }}"
+                                        onclick="mostrarInformacion(
+                                        '{{ turno.doctor | e }}',
+                                        '{{ turno.area | e }}',
+                                        '{{ turno.horas_trabajadas }}',
+                                        '{{ turno.turno | e }}',
+                                        '{{ turno.fecha_trabajo.strftime('%Y-%m-%d') }}'
+                                        );">
+                                        Información ({{ apellido }})
+                                    </button>
+                                {% endfor %}
+                            {% else %}
+                                <strong>--</strong>
+                            {% endif %}
+                        </td>
                     {% endfor %}
-                </td>
-                {% if (primer_dia_semana + dia) % 7 == 0 %}
-                    </tr><tr>
-                {% endif %}
+                </tr>
             {% endfor %}
-            {% for _ in range((primer_dia_semana + dias_del_mes) % 7, 7) %}
-                <td class="empty"></td>
-            {% endfor %}
-        </tr>
-    </table>
-    
-    <a href="/" class="volver">Volver</a>
-    
+        </table>
+        
+        <a href="{{ url_for('index') }}" class="volver">Volver</a>
+    </div>
 </body>
 </html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Semanal - {{ doctor|default('Desconocido') }} - {{ nombre_mes|default('Mes') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --normal-color: #e2efda; /* Color for normal shifts */
+            --extra-color: #c6efce;  /* Color for extra shifts */
+            --night-normal-color: #ffe4e1; /* Color for night normal shifts */
+            --night-extra-color: #c6efce;  /* Color for night extra shifts */
+        }
+        
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calendar-table th, .calendar-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            vertical-align: top;
+        }
+        
+        .calendar-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        
+        .calendar-table td {
+            min-height: 150px; /* Adjusted height since empty categories won't take space */
+            background-color: #f9f9f9;
+        }
+        
+        .turno-section {
+            margin: 8px 0;
+        }
+        
+        .turno-label {
+            font-weight: bold;
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 4px;
+            text-align: left;
+        }
+        
+        .turno-item {
+            margin: 4px 0;
+            padding: 6px;
+            border-radius: 3px;
+            font-size: 13px;
+            color: #333;
+            word-break: break-word;
+            text-align: left;
+        }
+        
+        .day-header {
+            font-weight: bold;
+            background-color: #e2efda;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .empty-day {
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+        
+        header {
+            background-color: var(--light-color);
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            height: 50px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .btn-logout {
+            padding: 8px 15px;
+            background-color: var(--danger-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+        
+        h1, h2 {
+            color: var(--primary-color);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            background-color: var(--light-color);
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+        }
+        
+        .week-section {
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .calendar-table th, .calendar-table td {
+                font-size: 12px;
+                padding: 8px;
+            }
+            
+            .turno-label, .turno-item {
+                font-size: 11px;
+                padding: 4px;
+            }
+            
+            .calendar-table td {
+                min-height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='img/logo_essalud.png') }}" alt="Logo Essalud" class="logo">
+            <h1>Gestión de Turnos</h1>
+            <div class="user-info">
+                <span>Bienvenido, {{ session['username']|default('Usuario') }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Calendario Semanal - {{ doctor|default('Desconocido') }} - {{ nombre_mes|default('Mes') }}</h2>
+        <a href="{{ url_for('index') }}" class="btn-back">Volver a la lista</a>
+
+        {% if semanas %}
+            {% for semana in semanas %}
+            <div class="week-section">
+                <h3>Semana {{ loop.index }} ({{ semana.start.strftime('%d/%m/%Y') }} al {{ semana.end.strftime('%d/%m/%Y') }})</h3>
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>Lunes</th>
+                            <th>Martes</th>
+                            <th>Miércoles</th>
+                            <th>Jueves</th>
+                            <th>Viernes</th>
+                            <th>Sábado</th>
+                            <th>Domingo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% set days = semana.dias.keys()|list|sort %}
+                            {% for date_key in days %}
+                                <td {% if semana.dias[date_key] is none %}class="empty-day"{% endif %}>
+                                    <div class="day-header">
+                                        {% if semana.dias[date_key] is none %}
+                                            --
+                                        {% else %}
+                                            {{ date_key.strftime('%d/%m/%Y') }}
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        {% if semana.dias[date_key] %}
+                                            {% set has_shifts = false %}
+                                            {% for turno_type in ['MAÑANA', 'TARDE', 'NOCHE'] %}
+                                                <!-- Normal Shifts -->
+                                                {% set normal_shifts = semana.dias[date_key][turno_type] | selectattr('tipo_horas', 'equalto', 'Normal') | list %}
+                                                {% if normal_shifts %}
+                                                    {% set has_shifts = true %}
+                                                    <div class="turno-section">
+                                                        <div class="turno-label">
+                                                            {{ turno_type.capitalize() }}
+                                                        </div>
+                                                        {% for turno in normal_shifts %}
+                                                            <div class="turno-item" style="background-color: {% if turno_type != 'NOCHE' %}{{ colores_doctores.get(doctor, '#FFFFFF') }}{% else %}var(--night-normal-color){% endif %};">
+                                                                {{ turno.area }} ({{ turno.horas }}h)
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                                <!-- Extra Shifts -->
+                                                {% set extra_shifts = semana.dias[date_key][turno_type] | selectattr('tipo_horas', 'equalto', 'Extra') | list %}
+                                                {% if extra_shifts %}
+                                                    {% set has_shifts = true %}
+                                                    <div class="turno-section">
+                                                        <div class="turno-label">
+                                                            {{ turno_type.capitalize() }} Extra
+                                                        </div>
+                                                        {% for turno in extra_shifts %}
+                                                            <div class="turno-item" style="background-color: {% if turno_type != 'NOCHE' %}var(--extra-color){% else %}var(--night-extra-color){% endif %};">
+                                                                {{ turno.area }} ({{ turno.horas }}h)
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if not has_shifts %}
+                                                <div class="turno-item empty-day">--</div>
+                                            {% endif %}
+                                        {% else %}
+                                            <div class="turno-item empty-day">--</div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-data">No hay turnos registrados para este doctor en el mes seleccionado.</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>© 2025 Essalud. Desarrollado por Yumar Manrique Araujo.</p>
+    </footer>
+
+    <style>
+        .no-data {
+            text-align: center;
+            color: var(--secondary-color);
+            padding: 20px;
+        }
+    </style>
+</body>
+</html>
