@@ -302,6 +302,16 @@ def turnos():
             # Capitalizar el nombre
             nombre_capitalizado = capitalizar_nombre(nombre)
 
+            # *** NEW VALIDATION: Check for existing shift with same date, turn, and area ***
+            existing_turno_conflict = Turno.query.filter_by(
+                fecha_trabajo=fecha,
+                turno=turno,
+                area=area
+            ).first()
+            if existing_turno_conflict:
+                flash(f"Ya existe un turno registrado para el área {area} en el turno {turno} del día {fecha.strftime('%d/%m/%Y')}.", "danger")
+                return redirect(url_for("index", scroll_position=scroll_position))
+
             # Check for existing shift to prevent duplicates
             existing_turno = Turno.query.filter_by(
                 doctor=nombre_capitalizado,
@@ -385,6 +395,30 @@ def borrar_turno(id):
     scroll_position = request.form.get('scroll_position', 0, type=int)
     return redirect(url_for('index', scroll_position=scroll_position))
 
+@app.route('/borrar_turnos_seleccionados', methods=['POST'])
+def borrar_turnos_seleccionados():
+    if 'user_id' not in session:
+        flash('Debe iniciar sesión primero', 'danger')
+        return redirect(url_for('login'))
+
+    scroll_position = request.form.get('scroll_position', 0, type=int)
+    turno_ids = request.form.getlist('turno_ids')  # Get list of selected shift IDs
+
+    if not turno_ids:
+        flash('No se seleccionaron turnos para eliminar.', 'warning')
+        return redirect(url_for('index', scroll_position=scroll_position))
+
+    try:
+        # Delete all shifts with the given IDs
+        Turno.query.filter(Turno.id.in_(turno_ids)).delete()
+        db.session.commit()
+        flash(f'{len(turno_ids)} turno(s) eliminado(s) con éxito.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error al eliminar los turnos: {str(e)}', 'danger')
+
+    return redirect(url_for('index', scroll_position=scroll_position))
+
 @app.route('/editar_turno/<int:id>', methods=['GET', 'POST'])
 def editar_turno(id):
     if 'user_id' not in session:
@@ -427,6 +461,18 @@ def editar_turno(id):
             # Capitalizar el nombre
             nombre_capitalizado = capitalizar_nombre(nombre)
 
+            # *** NEW VALIDATION: Check for existing shift with same date, turn, and area (excluding current shift) ***
+            existing_turno_conflict = Turno.query.filter(
+                Turno.fecha_trabajo == fecha,
+                Turno.turno == turno_form,
+                Turno.area == area,
+                Turno.id != turno.id
+            ).first()
+            if existing_turno_conflict:
+                flash(f"Ya existe un turno registrado para el área {area} en el turno {turno_form} del día {fecha.strftime('%d/%m/%Y')}.", "danger")
+                return redirect(url_for("editar_turno", id=id, scroll_position=scroll_position))
+
+            # Calculate current monthly hours (excluding current shift)
             total_horas_normales = db.session.query(func.sum(Turno.horas_trabajadas)).filter(
                 and_(
                     func.lower(Turno.doctor) == nombre.lower(),
@@ -453,6 +499,7 @@ def editar_turno(id):
                 flash(f"No se pueden asignar más de 100 horas extras por mes. Horas actuales: {total_horas_extras}", "danger")
                 return redirect(url_for("editar_turno", id=id, scroll_position=scroll_position))
 
+            # Update shift details
             turno.doctor = nombre_capitalizado
             turno.area = area
             turno.fecha_trabajo = fecha
